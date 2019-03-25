@@ -1,0 +1,33 @@
+service: math
+# Configuraciones de proveedor
+provider:
+  name: openwhisk
+  runtime: python:3.7
+  ignore_certs: true
+  memory: 2048
+  timeout: 600
+# Creación de paquete de implementación
+package:
+  exclude:
+    - node_modules/**
+    - '*.json'
+    - virtualenv/**
+    - '!virtualenv/bin/activate_this.py'
+    - '!virtualenv/lib/python3.7/site-packages/netifaces.cpython-37m-x86_64-linux-gnu.so'
+    - '!virtualenv/lib/python3.7/site-packages/pip'
+    - '!virtualenv/lib/python3.7/site-packages/setuptools'
+    - '!virtualenv/lib/python3.7/site-packages/easy_install.py'
+# Configuración de función
+functions:
+  # Nombre
+  fft:
+    # Prchivo y punto de entrada
+    handler: __main__.main
+    annotations:
+      web-export: true
+# Plugin para despliegue
+plugins:
+  - serverless-openwhisk
+
+
+

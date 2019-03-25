@@ -1,0 +1,4 @@
+numpy==1.14.6
+mxnet==1.3.0.post0
+netifaces
+matplotlib==2.2.3

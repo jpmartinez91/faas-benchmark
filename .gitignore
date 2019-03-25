@@ -1,0 +1,11 @@
+keyfile.json
+node_modules
+.requirements.zip
+package-lock.json
+exposicion
+.serverless
+__pycache__
+pp
+db.log
+virtualenv
+models.__pycache__

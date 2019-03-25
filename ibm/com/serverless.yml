@@ -1,0 +1,27 @@
+service: com
+
+provider:
+  name: openwhisk
+  runtime: python:3.7
+  memory: 2048
+  timeout: 600
+
+package:
+  exclude:
+    - node_modules/**
+    - '*.json'
+    - virtualenv/**
+    - '!virtualenv/bin/activate_this.py'
+    - '!virtualenv/lib/python3.7/site-packages/netifaces.cpython-37m-x86_64-linux-gnu.so'
+    - '!virtualenv/lib/python3.7/site-packages/pip'
+    - '!virtualenv/lib/python3.7/site-packages/setuptools'
+    - '!virtualenv/lib/python3.7/site-packages/easy_install.py'
+
+functions:
+  com:
+    handler: __main__.main
+    annotations:
+      web-export: true
+
+plugins:
+  - serverless-openwhisk

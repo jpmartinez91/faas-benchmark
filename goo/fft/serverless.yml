@@ -1,0 +1,31 @@
+service: goo-thesis-math
+# Configuracion del proveedor
+provider:
+  name: google
+  runtime: python37
+  region: us-central1
+  project: tesis-gcl
+  memorySize: 2048
+  timeout: 540s
+  credentials: ../../keyfile.json
+# Plugin para despliegue
+plugins:
+  - serverless-google-cloudfunctions
+# Creación de paquete de implementacióm
+package:
+  exclude:
+    - node_modules/**
+    - .gitignore
+    - .git/**
+    - "*.json"
+# Configuración de función
+functions:
+  # nombre
+  fft:
+    # punto de entrada
+    handler: math
+    # desencadenador
+    events:
+      - http: path
+
+

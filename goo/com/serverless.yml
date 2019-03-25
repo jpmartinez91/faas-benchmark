@@ -1,0 +1,25 @@
+service: goo-thesis-cvmm
+provider:
+  name: google
+  runtime: python37
+  region: us-central1
+  project: tesis-gcl
+  memorySize: 2048
+  timeout: 540s
+  credentials: ../../keyfile.json
+
+plugins:
+  - serverless-google-cloudfunctions
+
+package:
+  exclude:
+    - node_modules/**
+    - .gitignore
+    - .git/**
+    - "*.json"
+
+functions:
+  com:
+    handler: com
+    events:
+      - http: path

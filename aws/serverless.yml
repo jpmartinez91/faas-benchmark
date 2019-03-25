@@ -1,0 +1,83 @@
+service: aws-thesis
+# Configuraciones de proveedor
+provider:
+  name: aws
+  runtime: python3.7
+  memorySize: 3008
+  timeout: 900
+  environment:
+    DYNAMODB_TABLE: dyna-${self:service}-${opt:stage, self:provider.stage}
+  # Asginación de roles y permisos
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:*
+      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
+#  Especificación de plugins para pruebas locales y despliegue en la nube
+plugins:
+  - serverless-offline-python
+  - serverless-dynamodb-local
+  - serverless-python-requirements
+
+package:
+  individually: true
+
+custom:
+  # Manejo de dependencias
+  pythonRequirements:
+    zip: true
+  # Pruebas locales
+  dynamodb:
+    start:
+      port: 8989
+      inMemory: true
+      migrate: true
+# Configuración de funciones
+functions:
+  # nombre
+  fft:
+    # Archivo y nombre del punto de entrada
+    handler: handler.handler
+    module: fft
+    # Configuración de desencadenadores
+    events:
+      - http:
+          path: /fft
+          method: get
+  ml:
+    handler: handler.mxnet
+    module: ml
+    events:
+      - http:
+          path: /ml
+          method: get
+  com:
+    handler: handler.handler
+    module: com
+    events:
+      - http:
+          path: /com
+          method: get
+# Creación de recursos DynamoDB
+resources:
+  Resources:
+    thesisTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: id_tw
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: id_tw
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:provider.environment.DYNAMODB_TABLE}
+
+
+
+
+
